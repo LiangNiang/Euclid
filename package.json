@@ -1,0 +1,11 @@
+{
+  "name": "euclid",
+  "version": "0.0.1",
+  "scripts": {
+  },
+  "author": {
+    "name": "Liang",
+    "email": "liangniangbaby@gmail.com"
+  },
+  "license": "MIT"
+}
