@@ -11,4 +11,7 @@ type UserInfo = {
 type ProjectInfo  = {
   repoPath: string
   branch: string
+  appName: string
+  domainPrefix: string
+  dirName?: string
 }

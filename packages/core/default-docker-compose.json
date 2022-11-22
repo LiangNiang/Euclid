@@ -1,0 +1,17 @@
+{
+  "version": "3",
+  "services": {
+    "http": {
+      "image": "",
+      "container_name": "",
+      "restart": "always",
+      "labels": [""]
+    }
+  },
+  "networks": {
+    "default": {
+      "name": "traefik_default",
+      "external": true
+    }
+  }
+}
