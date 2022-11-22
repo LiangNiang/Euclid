@@ -1,0 +1,14 @@
+{
+  "name": "@euclid/common",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.ts",
+  "author": {
+    "name": "Liang",
+    "email": "liangniangbaby@gmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1"
+  }
+}

@@ -1,5 +1,4 @@
-import { SimpleGit, SimpleGitOptions } from 'simple-git'
-import { simpleGit } from 'simple-git'
+import { simpleGit, SimpleGit, SimpleGitOptions } from 'simple-git'
 import path from 'node:path'
 import fs from 'node:fs'
 import { nanoid, customAlphabet } from 'nanoid'
@@ -32,13 +31,14 @@ const config: Knex.Config = {
   client: 'sqlite3',
   connection: {
     filename: './data.db'
-  }
+  },
+  useNullAsDefault: true
 }
 
 const knexInstance = knex(config)
 
 
-function genAuthorizedRepoPath(repoPath: string, userInfo: UserInfo, accessToken: string) {
+function genAuthorizedRepoPath(repoPath: string, userInfo: User.Item, accessToken: string) {
   const urlData = new URL(repoPath)
   const { protocol, host, pathname } = urlData
   return `${protocol}//${userInfo.username}:${accessToken}@${host}${pathname}`
@@ -59,7 +59,7 @@ async function doClone() {
   }
 }
 
-async function run(id: number) {
+async function run(id: Project.Item['id']) {
   // await knexInstance('projects')
   const p = await knexInstance('projects').where({ id }).first()
   if (!p) throw new Error('project not found')
@@ -85,14 +85,17 @@ async function run(id: number) {
 }
 
 (async () => {
-  await knexInstance.schema.createTableIfNotExists('projects', project => {
-    project.increments('id')
-    project.string('repoPath')
-    project.string('branch')
-    project.string('dirName')
-    project.string('appName')
-    project.string('domainPrefix')
-  })
+  if (!await knexInstance.schema.hasTable('projects')) {
+    await knexInstance.schema.createTable('projects', project => {
+      project.increments('id')
+      project.string('repoPath')
+      project.string('branch')
+      project.string('dirName')
+      project.string('appName')
+      project.string('domainPrefix')
+      project.timestamps()
+    })
+  }
   // await run(1)
   // doClone()
 })()

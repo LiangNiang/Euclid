@@ -1,11 +1,10 @@
-export const basicUserInfo: UserInfo = {
+export const basicUserInfo: User.Item = {
   username: 'LiangNiang'
 }
 
-export const projectInfo: ProjectInfo = {
+export const projectInfo: Project.InputParam = {
   repoPath: 'https://github.com/LiangNiang/react-ts-cheatsheet.git',
-  // repoPath: `https://${basicUserInfo.username}:${ACCESS_TOKEN}@github.com/LiangNiang/deploy-react-app-demo.git`,
   branch: 'main',
   appName: 'react-ts-cheatsheet',
-  domainPrefix: 'react-ts-cheatsheet'
+  subdomain: 'react-ts-cheatsheet'
 }
