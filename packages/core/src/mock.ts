@@ -20,6 +20,19 @@ export const MOCK_PROJECT_2: Project.InputParam = {
   runMode: 'dockerfile' as Project.RunMode
 }
 
+/**
+ * error
+ */
+export const MOCK_PROJECT_3: Project.InputParam = {
+  repoPath: 'https://github.com/LiangNiang/Euclid.git',
+  branch: 'main',
+  subdomainStatic: 'euclid',
+  appName: 'euclid-web',
+  buildPath: 'dist',
+  stage: 'prod' as Project.Stage,
+  runMode: 'dockerfile' as Project.RunMode
+}
+
 export const MOCK_USER: User.InputParam = {
   username: 'LiangNiang'
 }
