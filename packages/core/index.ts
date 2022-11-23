@@ -22,7 +22,7 @@ const options: Partial<SimpleGitOptions> = {
   baseDir,
   binary: 'git',
   maxConcurrentProcesses: 6,
-  trimmed: false,
+  trimmed: false
 }
 
 const git: SimpleGit = simpleGit(options)
@@ -37,7 +37,6 @@ const config: Knex.Config = {
 
 const knexInstance = knex(config)
 
-
 function genAuthorizedRepoPath(repoPath: string, userInfo: User.Item, accessToken: string) {
   const urlData = new URL(repoPath)
   const { protocol, host, pathname } = urlData
@@ -48,7 +47,11 @@ async function doClone() {
   const localDir = nanoid()
   try {
     console.log('clone start')
-    await git.clone(genAuthorizedRepoPath(projectInfo.repoPath, basicUserInfo, ACCESS_TOKEN), localDir, [`-b${projectInfo.branch}`, '--depth=1'])
+    await git.clone(
+      genAuthorizedRepoPath(projectInfo.repoPath, basicUserInfo, ACCESS_TOKEN),
+      localDir,
+      [`-b${projectInfo.branch}`, '--depth=1']
+    )
     await knexInstance('projects').insert({
       ...projectInfo,
       dirName: localDir
@@ -84,8 +87,8 @@ async function run(id: Project.Item['id']) {
   shell.exec('docker-compose up -d')
 }
 
-(async () => {
-  if (!await knexInstance.schema.hasTable('projects')) {
+;(async () => {
+  if (!(await knexInstance.schema.hasTable('projects'))) {
     await knexInstance.schema.createTable('projects', project => {
       project.increments('id')
       project.string('repoPath')

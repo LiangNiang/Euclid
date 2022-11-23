@@ -4,7 +4,8 @@
   "private": true,
   "main": "index.ts",
   "scripts": {
-    "dev": "tsx watch ."
+    "dev": "tsx watch .",
+    "lint": "eslint --fix ."
   },
   "author": {
     "name": "Liang",
