@@ -12,27 +12,23 @@ import { stringify } from 'yaml'
 class Core {
   git: SimpleGit
   db: Knex
-  Projects: Knex.QueryBuilder<Project.DB, Project.DB[]>
+  Projects: () => Knex.QueryBuilder<Project.DB, Project.DB[]>
 
   constructor() {
     this.git = initGitInstance()
     this.db = initDBInstance()
     initDB(this.db)
-    this.Projects = this.db<Project.DB>('projects')
+    this.Projects = () => this.db<Project.DB>('projects')
   }
 
   async clone(config: { project: Project.InputParam; user: User.InputParam }) {
     const { project, user } = config
-    await cloneRemoteRepoToLocal(this.git, project, user)
-      .then(async dirName => {
-        await this.Projects.insert({
-          ...project,
-          dirName
-        })
-      })
-      .catch(err => {
-        console.error(err)
-      })
+    const dirName = await cloneRemoteRepoToLocal(this.git, project, user)
+    const ids = await this.Projects().insert({
+      ...project,
+      dirName
+    })
+    return ids
   }
 
   genDockerComposeConfig(serviceName: string, domainName: string) {
@@ -69,7 +65,7 @@ class Core {
   }
 
   async run(projectID: Project.DB['id']) {
-    const project = await this.Projects.where('id', projectID).first()
+    const project = await this.Projects().where('id', projectID).first()
     if (!project) throw new Error('project not found')
     console.log('project info', project)
     console.log(`current work dir: ${pwd().toString()}`)
