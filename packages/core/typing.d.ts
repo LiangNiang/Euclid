@@ -5,5 +5,6 @@ declare namespace NodeJS {
     ACCESS_TOKEN?: string
     GIT_WORK_DIR_NAME?: string
     DB_NAME?: string
+    DOMAIN_NAME?: string
   }
 }

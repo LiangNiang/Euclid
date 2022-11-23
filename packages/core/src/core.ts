@@ -26,7 +26,9 @@ class Core {
     const { project, user } = config
     let dirName
     try {
+      console.error('Project clone start')
       dirName = await cloneRemoteRepoToLocal(this.git, project, user)
+      console.error('Project clone success')
     } catch (err) {
       console.error('Project clone error')
       return
@@ -44,6 +46,9 @@ class Core {
     newConfig.services[serviceName] = {
       image: serviceName,
       container_name: serviceName,
+      environment: {
+        DOMAIN_NAME: process.env.DOMAIN_NAME
+      },
       restart: 'always',
       labels: [
         'traefik.enable=true',
@@ -96,7 +101,7 @@ class Core {
         const config = await this.genDockerComposeConfig(serviceName, domainName)
         fs.writeFileSync('./docker-compose.yaml', stringify(config))
         console.log('** build docker image start **')
-        if (exec(`docker build -t ${serviceName} .`, { silent: true }).code !== 0) {
+        if (exec(`docker build -t ${serviceName} .`).code !== 0) {
           throw new Error('docker build fail')
         }
         console.log('** build docker image success **')
