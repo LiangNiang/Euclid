@@ -2,7 +2,7 @@ FROM node:16.17.0-alpine as builder
 
 WORKDIR /code
 ADD package.json /code/
-RUN npm i -g pnpm && pnpm install
+RUN npm i -g pnpm nrm --registry=https://registry.npmmirror.com/ && nrm use taobao && pnpm install
 
 ADD . /code
 RUN pnpm run build
