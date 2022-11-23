@@ -5,6 +5,7 @@
   "main": "index.ts",
   "scripts": {
     "dev": "tsx watch .",
+    "start": "tsx .",
     "lint": "eslint --fix ."
   },
   "author": {

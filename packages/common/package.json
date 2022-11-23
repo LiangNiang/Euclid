@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "private": true,
   "main": "index.ts",
+  "scripts": {
+    "lint": "eslint --fix ."
+  },
   "author": {
     "name": "Liang",
     "email": "liangniangbaby@gmail.com"
