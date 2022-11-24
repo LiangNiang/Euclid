@@ -46,6 +46,10 @@ class Core {
     newConfig.services[serviceName] = {
       image: serviceName,
       container_name: serviceName,
+      build: {
+        context: '.',
+        dockerfile: 'Dockerfile'
+      },
       environment: {
         DOMAIN_NAME: process.env.DOMAIN_NAME
       },
@@ -100,12 +104,12 @@ class Core {
         console.log('domainName', domainName)
         const config = await this.genDockerComposeConfig(serviceName, domainName)
         fs.writeFileSync('./docker-compose.yaml', stringify(config))
-        console.log('** build docker image start **')
-        if (exec(`docker build -t ${serviceName} .`).code !== 0) {
-          throw new Error('docker build fail')
-        }
-        console.log('** build docker image success **')
-        if (exec(`docker-compose --project-name ${domainName} up -d`).code !== 0) {
+        // console.log('** build docker image start **')
+        // if (exec(`docker build -t ${serviceName} .`).code !== 0) {
+        //   throw new Error('docker build fail')
+        // }
+        // console.log('** build docker image success **')
+        if (exec(`docker-compose --project-name ${domainName} up --build -d`).code !== 0) {
           throw new Error('Failed to start app on dockerfile mode')
         }
         break

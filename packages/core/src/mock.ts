@@ -33,6 +33,17 @@ export const MOCK_PROJECT_3: Project.InputParam = {
   runMode: 'dockerfile' as Project.RunMode
 }
 
+export const MOCK_PROJECT_4: Project.InputParam = {
+  repoPath: 'https://github.com/LiangNiang/Euclid.git',
+  branch: 'WIP/mvp-demo',
+  subdomainStatic: 'vite-react-template',
+  subWorkDir: 'project-template/vite-react',
+  appName: 'vite-react-template',
+  buildPath: 'dist',
+  stage: 'uat' as Project.Stage,
+  runMode: 'dockerfile' as Project.RunMode
+}
+
 export const MOCK_USER: User.InputParam = {
   username: 'LiangNiang'
 }
