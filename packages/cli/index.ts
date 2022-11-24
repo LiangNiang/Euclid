@@ -8,7 +8,9 @@ import Core from '@euclid/core'
 
 const ajv = new Ajv()
 
-function validateConfigFile(data): data is { project: Project.InputParam; user?: User.InputParam } {
+function validateConfigFile(
+  data: unknown
+): data is { project: Project.InputParam; user?: User.InputParam } {
   const schema = {
     type: 'object',
     properties: {
