@@ -39,16 +39,21 @@ export function initGitInstance() {
  * @param accessToken git 用户的 accessToken
  * @returns 一个带有授权的 repo 地址
  */
-export function genAuthorizedRepoPath(repoPath: string, userInfo: User.Item, accessToken?: string) {
+export function genAuthorizedRepoPath(
+  repoPath: string,
+  userInfo?: User.Item,
+  accessToken?: string
+) {
   const urlData = new URL(repoPath)
   const { protocol, host, pathname } = urlData
+  if (!userInfo) return repoPath
   return `${protocol}//${[userInfo.username, accessToken].join(':')}@${host}${pathname}`
 }
 
 export async function cloneRemoteRepoToLocal(
   git: SimpleGit,
   project: Project.InputParam,
-  user: User.InputParam
+  user?: User.InputParam
 ) {
   const dirName: Project.Item['dirName'] = genRandomLowercaseString()
   try {

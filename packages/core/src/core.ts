@@ -9,6 +9,7 @@ import { genRandomLowercaseString } from './utils'
 import defaultDockerComposeConfig from './default-docker-compose.json'
 import { stringify } from 'yaml'
 import { safeCD } from './shellWrapper'
+import { rmDockerComposeContainer } from './docker'
 
 class Core {
   git: SimpleGit
@@ -22,7 +23,7 @@ class Core {
     this.Projects = () => this.db<Project.DB>('projects')
   }
 
-  async clone(config: { project: Project.InputParam; user: User.InputParam }) {
+  async clone(config: { project: Project.InputParam; user?: User.InputParam }) {
     const { project, user } = config
     let dirName
     try {
@@ -95,6 +96,8 @@ class Core {
     console.log(`current work dir: ${pwd().toString()}`)
     const rs = genRandomLowercaseString()
 
+    let actualDomain
+
     switch (project.runMode) {
       case 'dockerfile': {
         if (!fs.existsSync('Dockerfile')) throw new Error('Dockerfile 文件不存在')
@@ -102,20 +105,27 @@ class Core {
         console.log('serviceName', serviceName)
         const domainName = await this.genDomainName(project)
         console.log('domainName', domainName)
-        const config = await this.genDockerComposeConfig(serviceName, domainName)
+        if (project.stage === 'prod') {
+          if (rmDockerComposeContainer(domainName).code !== 0) {
+            throw new Error('生产环境下删除旧的容器失败')
+          }
+        }
+        const config = this.genDockerComposeConfig(serviceName, domainName)
         fs.writeFileSync('./docker-compose.yaml', stringify(config))
-        // console.log('** build docker image start **')
-        // if (exec(`docker build -t ${serviceName} .`).code !== 0) {
-        //   throw new Error('docker build fail')
-        // }
-        // console.log('** build docker image success **')
         if (exec(`docker-compose --project-name ${domainName} up --build -d`).code !== 0) {
           throw new Error('Failed to start app on dockerfile mode')
         }
+        actualDomain = `${domainName}.${process.env.DOMAIN_NAME}`
+        break
+      }
+      case 'pure': {
         break
       }
       default:
         break
+    }
+    return {
+      actualDomain
     }
   }
 }

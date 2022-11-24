@@ -1,0 +1,21 @@
+{
+  "name": "@euclid/cli",
+  "version": "0.0.1",
+  "author": {
+    "name": "Liang",
+    "email": "liangniangbaby@gmail.com"
+  },
+  "license": "MIT",
+  "scripts": {
+    "start": "tsx ."
+  },
+  "devDependencies": {
+    "tsx": "^3.12.1"
+  },
+  "dependencies": {
+    "@euclid/common": "workspace:*",
+    "@euclid/core": "workspace:*",
+    "ajv": "^8.11.2",
+    "commander": "^9.4.1"
+  }
+}
