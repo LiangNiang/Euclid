@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "start": "tsx .",
-    "build": "ncc build index.ts -o dist",
+    "build": "ncc build index.ts -o dist -m",
     "publish:dist": "pnpm run build && cd dist && pnpm publish"
   },
   "devDependencies": {
