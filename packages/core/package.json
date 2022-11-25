@@ -1,0 +1,33 @@
+{
+  "name": "@euclid/core",
+  "version": "0.0.1",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "dev": "tsx watch .",
+    "test": "tsx test.ts",
+    "lint": "eslint --fix ."
+  },
+  "author": {
+    "name": "Liang",
+    "email": "liangniangbaby@gmail.com"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@euclid/common": "workspace:*",
+    "better-sqlite3": "^8.0.0",
+    "dotenv": "^16.0.2",
+    "knex": "^2.3.0",
+    "nanoid": "^4.0.0",
+    "shelljs": "^0.8.5",
+    "simple-git": "^3.15.0",
+    "yaml": "^2.1.3"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/node": "^18.7.20",
+    "@types/shelljs": "^0.8.11",
+    "tsx": "^3.12.1",
+    "typescript": "^4.8.3"
+  }
+}

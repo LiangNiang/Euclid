@@ -1,0 +1,12 @@
+{
+  "project": {
+    "repoPath": "https://github.com/LiangNiang/Euclid.git",
+    "branch": "WIP/mvp-demo",
+    "subdomainStatic": "cra-template",
+    "subWorkDir": "project-template/cra",
+    "appName": "cra-template",
+    "buildPath": "dist",
+    "stage": "prod",
+    "runMode": "dockerfile"
+  }
+}

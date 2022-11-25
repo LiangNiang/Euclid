@@ -102,3 +102,10 @@ dist
 
 # TernJS port file
 .tern-port
+
+.DS_Store
+
+.idea
+project-template/**/pnpm-workspace.yaml
+*.db
+**/*.gitWorkDir/**
