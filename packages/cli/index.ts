@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /// <reference types="@euclid/common/types" />
 
 import { program, Option } from 'commander'

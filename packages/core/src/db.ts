@@ -1,7 +1,7 @@
 import knex, { Knex } from 'knex'
 
 export function initDBInstance() {
-  const DB_NAME = process.env.DB_NAME || 'data.sqlite'
+  const DB_NAME = process.env.DB_NAME || 'data.sqlite.db'
   const config: Knex.Config = {
     client: 'better-sqlite3',
     connection: {

@@ -105,6 +105,7 @@ dist
 
 .DS_Store
 
+.idea
 project-template/**/pnpm-workspace.yaml
-*.sqlite
+*.db
 **/*.gitWorkDir/**

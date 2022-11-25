@@ -1,0 +1,16 @@
+{
+  "name": "create-euclid",
+  "version": "0.0.2",
+  "author": {
+    "name": "Liang",
+    "email": "liangniangbaby@gmail.com"
+  },
+  "main": "index.js",
+  "bin": {
+    "euclid": "./index.js"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "license": "MIT"
+}
