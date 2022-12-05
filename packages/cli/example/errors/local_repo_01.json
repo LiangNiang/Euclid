@@ -1,0 +1,15 @@
+{
+  "project": {
+    "repoPath": "/home/liang/Projects/wqefwqevfcqer4t",
+    "branch": "WIP/mvp-demo",
+    "subdomainStatic": "cra-template",
+    "subWorkDir": "project-template/cra",
+    "appName": "cra-template",
+    "buildPath": "dist",
+    "stage": "uat",
+    "runMode": "dockerfile"
+  },
+  "user": {
+    "username": "LiangNiang"
+  }
+}

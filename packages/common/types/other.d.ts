@@ -1,5 +1,5 @@
 interface DB_PARAMS {
-  id: number
+  id: string
   created_at: string
   updated_at: string
 }

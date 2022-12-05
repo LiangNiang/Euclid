@@ -39,10 +39,15 @@ function validateConfigFile(
         additionalProperties: false
       },
       user: {
-        type: 'object'
+        type: 'object',
+        properties: {
+          username: { type: 'string' }
+        },
+        required: ['username'],
+        additionalProperties: false
       }
     },
-    required: ['project'],
+    required: ['project', 'user'],
     additionalProperties: false
   }
 
@@ -73,12 +78,12 @@ readFile(configPath, 'utf8', async (err, data) => {
   const valid = validateConfigFile(config)
   if (!valid) throw new Error('Invalid config file')
   const core = new Core()
-  const ids = await core.clone({
+  const id = await core.clone({
     project: config.project,
     user: config.user
   })
-  if (ids) {
-    const result = await core.run(ids[0])
+  if (id) {
+    const result = await core.run(id)
     console.log(result)
     process.exit(0)
   }
