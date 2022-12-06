@@ -1,12 +1,15 @@
 {
   "project": {
-    "repoPath": "https://github.com/LiangNiang/Euclid.git",
+    "repoPath": "/home/liang/Projects/react-ts-cheatsheet",
     "branch": "WIP/mvp-demo",
     "subdomainStatic": "cra-template",
     "subWorkDir": "project-template/cra",
     "appName": "cra-template",
     "buildPath": "dist",
-    "stage": "prod",
+    "stage": "uat",
     "runMode": "dockerfile"
+  },
+  "user": {
+    "username": "LiangNiang"
   }
 }

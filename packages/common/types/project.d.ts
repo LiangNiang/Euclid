@@ -11,7 +11,7 @@ declare namespace Project {
   }
 
   interface Item {
-    id: number
+    id: string
     repoPath: string
     branch: string
     /**

@@ -1,44 +1,62 @@
-import { Knex } from 'knex'
 import { SimpleGit } from 'simple-git'
 import path from 'node:path'
 import fs from 'node:fs'
 import { pwd, exec } from 'shelljs'
-import { initDB, initDBInstance } from './db'
+import { initDBInstance } from './db'
 import { cloneRemoteRepoToLocal, getGitWorkDIR, initGitInstance } from './git'
 import { genRandomLowercaseString } from './utils'
 import defaultDockerComposeConfig from './default-docker-compose.json'
 import { stringify } from 'yaml'
+import isURL from 'is-url'
 import { safeCD } from './shellWrapper'
 import { rmDockerComposeContainer } from './docker'
+import { PrismaClient, Project } from '@prisma/client'
 
 class Core {
   git: SimpleGit
-  db: Knex
-  Projects: () => Knex.QueryBuilder<Project.DB, Project.DB[]>
+  prisma!: InstanceType<typeof PrismaClient>
 
   constructor() {
     this.git = initGitInstance()
-    this.db = initDBInstance()
-    initDB(this.db)
-    this.Projects = () => this.db<Project.DB>('projects')
+    this.prisma = initDBInstance()
   }
 
-  async clone(config: { project: Project.InputParam; user?: User.InputParam }) {
+  async clone(config: { project: Project.InputParam; user: User.InputParam }) {
     const { project, user } = config
-    let dirName
-    try {
-      console.error('Project clone start')
-      dirName = await cloneRemoteRepoToLocal(this.git, project, user)
-      console.error('Project clone success')
-    } catch (err) {
-      console.error('Project clone error')
-      return
+    const { repoPath } = project
+    if (isURL(repoPath)) {
+      // remote repo
+      let dirName
+      try {
+        console.log('Project clone start')
+        dirName = await cloneRemoteRepoToLocal(this.git, project, user)
+        const res = await this.prisma.project.create({
+          data: {
+            ...project,
+            dirName,
+            user: {
+              connect: { username: user.username }
+            }
+          }
+        })
+        console.log('Project clone success')
+        return res.id
+      } catch (err) {
+        console.log(err)
+        console.error('Project clone error')
+        return
+      }
+    } else {
+      const res = await this.prisma.project.create({
+        data: {
+          ...project,
+          user: {
+            connect: { username: user.username }
+          }
+        }
+      })
+      return res.id
     }
-    const ids = await this.Projects().insert({
-      ...project,
-      dirName
-    })
-    return ids
   }
 
   genDockerComposeConfig(serviceName: string, domainName: string) {
@@ -65,7 +83,7 @@ class Core {
     return newConfig
   }
 
-  async genDomainName(project: Project.DB) {
+  async genDomainName(project: Project) {
     switch (project.stage) {
       case 'uat': {
         const branchInfo = await this.git.branch()
@@ -82,11 +100,16 @@ class Core {
   }
 
   async run(projectID: Project.DB['id']) {
-    const project = await this.Projects().where('id', projectID).first()
+    const project = await this.prisma.project.findFirst({
+      where: { id: projectID }
+    })
     if (!project) throw new Error('project not found')
     console.log('project info', project)
     console.log(`current work dir: ${pwd().toString()}`)
-    const workDir = path.join(getGitWorkDIR(), project.dirName, project.subWorkDir || '')
+
+    const workDir = project.dirName
+      ? path.join(getGitWorkDIR(), project.dirName, project.subWorkDir || '')
+      : project.repoPath
     try {
       safeCD(workDir)
     } catch (err) {

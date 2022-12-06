@@ -1,0 +1,15 @@
+{
+  "project": {
+    "repoPath": "https://github.com/LiangNiang/Euclid.git",
+    "branch": "deploy-demo",
+    "subdomainStatic": "euclid",
+    "subWorkDir": "packages/web",
+    "appName": "cra-template",
+    "buildPath": "dist",
+    "stage": "uat",
+    "runMode": "dockerfile"
+  },
+  "user": {
+    "username": "LiangNiang"
+  }
+}
