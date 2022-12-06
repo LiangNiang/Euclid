@@ -28,7 +28,7 @@ class Core {
       // remote repo
       let dirName
       try {
-        console.error('Project clone start')
+        console.log('Project clone start')
         dirName = await cloneRemoteRepoToLocal(this.git, project, user)
         const res = await this.prisma.project.create({
           data: {
@@ -39,9 +39,10 @@ class Core {
             }
           }
         })
+        console.log('Project clone success')
         return res.id
-        console.error('Project clone success')
       } catch (err) {
+        console.log(err)
         console.error('Project clone error')
         return
       }

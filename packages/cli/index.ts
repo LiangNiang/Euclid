@@ -1,6 +1,4 @@
 #!/usr/bin/env node
-/// <reference types="@euclid/common/types" />
-
 import { program, Option } from 'commander'
 import Ajv from 'ajv'
 import { readFile } from 'node:fs'

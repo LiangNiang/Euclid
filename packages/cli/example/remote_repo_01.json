@@ -1,6 +1,6 @@
 {
   "project": {
-    "repoPath": "https://gitee.com/liangniang/Euclid.git",
+    "repoPath": "https://github.com/LiangNiang/Euclid.git",
     "branch": "deploy-demo",
     "subdomainStatic": "euclid",
     "subWorkDir": "packages/web",

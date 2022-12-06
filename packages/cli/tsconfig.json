@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2015",
+    "module": "ESNext",
     "moduleResolution": "Node",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": [
+      "@euclid/common/types"
+    ]
   }
 }
