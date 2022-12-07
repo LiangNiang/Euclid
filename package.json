@@ -1,7 +1,9 @@
 {
   "name": "euclid",
   "version": "0.0.1",
-  "scripts": {},
+  "scripts": {
+    "start:cli": "pnpm -F @euclid/cli run start"
+  },
   "author": {
     "name": "Liang",
     "email": "liangniangbaby@gmail.com"
