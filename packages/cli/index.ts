@@ -68,10 +68,11 @@ console.log(options)
 
 const { type, file } = options
 
-const configPath = resolve(file)
+const INIT_CWD = process.env.INIT_CWD
+const configPath = resolve(INIT_CWD, file)
 
 readFile(configPath, 'utf8', async (err, data) => {
-  if (err) throw new Error('Could not read config file')
+  if (err) throw new Error(err)
   const config = JSON.parse(data)
   const valid = validateConfigFile(config)
   if (!valid) throw new Error('Invalid config file')
