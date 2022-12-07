@@ -1,7 +1,7 @@
 import { SimpleGit } from 'simple-git'
 import path from 'node:path'
 import fs from 'node:fs'
-import { pwd, exec } from 'shelljs'
+import shelljs from 'shelljs'
 import { initDBInstance } from './db'
 import { cloneRemoteRepoToLocal, getGitWorkDIR, initGitInstance } from './git'
 import { genRandomLowercaseString } from './utils'
@@ -9,16 +9,18 @@ import defaultDockerComposeConfig from './default-docker-compose.json'
 import { stringify } from 'yaml'
 import isURL from 'is-url'
 import { safeCD } from './shellWrapper'
-import { rmDockerComposeContainer } from './docker'
+import { initDockerInstance, rmDockerComposeContainer } from './docker'
 import { PrismaClient, Project } from '@prisma/client'
 
 class Core {
   git: SimpleGit
   prisma!: InstanceType<typeof PrismaClient>
+  docker: ReturnType<typeof initDockerInstance>
 
   constructor() {
     this.git = initGitInstance()
     this.prisma = initDBInstance()
+    this.docker = initDockerInstance()
   }
 
   async clone(config: { project: Project.InputParam; user: User.InputParam }) {
@@ -105,18 +107,18 @@ class Core {
     })
     if (!project) throw new Error('project not found')
     console.log('project info', project)
-    console.log(`current work dir: ${pwd().toString()}`)
+    console.log(`current work dir: ${shelljs.pwd().toString()}`)
 
     const workDir = project.dirName
       ? path.join(getGitWorkDIR(), project.dirName, project.subWorkDir || '')
-      : project.repoPath
+      : path.join(project.repoPath, project.subWorkDir || '')
     try {
       safeCD(workDir)
     } catch (err) {
       throw new Error('项目的 subWorkDir 有误')
     }
     this.git.cwd(workDir)
-    console.log(`current work dir: ${pwd().toString()}`)
+    console.log(`current work dir: ${shelljs.pwd().toString()}`)
     const rs = genRandomLowercaseString()
 
     let actualDomain
@@ -135,7 +137,7 @@ class Core {
         }
         const config = this.genDockerComposeConfig(serviceName, domainName)
         fs.writeFileSync('./docker-compose.yaml', stringify(config))
-        if (exec(`docker-compose --project-name ${domainName} up --build -d`).code !== 0) {
+        if (shelljs.exec(`docker-compose --project-name ${domainName} up --build -d`).code !== 0) {
           throw new Error('Failed to start app on dockerfile mode')
         }
         actualDomain = `${domainName}.${process.env.DOMAIN_NAME}`

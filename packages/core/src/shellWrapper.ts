@@ -1,8 +1,8 @@
-import { cd, error } from 'shelljs'
+import shelljs from 'shelljs'
 
-export function safeCD(...args: Parameters<typeof cd>) {
-  cd(...args)
-  if (error()) {
+export function safeCD(...args: Parameters<typeof shelljs.cd>) {
+  shelljs.cd(...args)
+  if (shelljs.error()) {
     throw new Error('cd fail')
   }
 }

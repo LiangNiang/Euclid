@@ -1,7 +1,7 @@
 {
   "project": {
-    "repoPath": "/home/liang/Projects/react-ts-cheatsheet",
-    "branch": "WIP/mvp-demo",
+    "repoPath": "/Users/liang/euclid-tmp/Euclid",
+    "branch": "main",
     "subdomainStatic": "cra-template",
     "subWorkDir": "project-template/cra",
     "appName": "cra-template",
