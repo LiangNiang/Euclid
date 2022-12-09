@@ -7,14 +7,31 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum repoType {
+  local
+  remote
+}
+
+enum Stage {
+  uat
+  pre
+  prod
+}
+
+enum RunMode {
+  dockerfile
+  detect
+}
+
 model Project {
   id              String          @id @default(auto()) @map("_id") @db.ObjectId
   appName         String
   branch          String
   buildPath       String
   repoPath        String
-  runMode         String
-  stage           String
+  repoType        repoType
+  runMode         RunMode
+  stage           Stage
   dirName         String          @default("")
   subWorkDir      String?
   subdomainStatic String

@@ -7,7 +7,7 @@ declare namespace Project {
 
   enum RunMode {
     dockerfile = 'dockerfile',
-    pure = 'pure'
+    detect = 'detect'
   }
 
   interface Item {

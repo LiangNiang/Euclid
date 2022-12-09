@@ -10,7 +10,10 @@ import { stringify } from 'yaml'
 import isURL from 'is-url'
 import { safeCD } from './shellWrapper'
 import { initDockerInstance, rmDockerComposeContainer } from './docker'
-import { PrismaClient, Project } from '@prisma/client'
+import { PrismaClient, Project, RunMode } from '@prisma/client'
+import { readJSON } from 'fs-extra'
+import frameworkList from '@vercel/frameworks'
+import { LocalFileSystemDetector, detectFramework, detectBuilders } from '@vercel/fs-detectors'
 
 class Core {
   git: SimpleGit
@@ -35,6 +38,7 @@ class Core {
         const res = await this.prisma.project.create({
           data: {
             ...project,
+            repoType: 'remote',
             dirName,
             user: {
               connect: { username: user.username }
@@ -52,6 +56,7 @@ class Core {
       const res = await this.prisma.project.create({
         data: {
           ...project,
+          repoType: 'local',
           user: {
             connect: { username: user.username }
           }
@@ -97,7 +102,7 @@ class Core {
       case 'prod':
         return project.subdomainStatic.toLowerCase()
       default:
-        return ''
+        throw new Error('Invalid stage')
     }
   }
 
@@ -124,7 +129,7 @@ class Core {
     let actualDomain
 
     switch (project.runMode) {
-      case 'dockerfile': {
+      case RunMode.dockerfile: {
         if (!fs.existsSync('Dockerfile')) throw new Error('Dockerfile 文件不存在')
         const serviceName = `${project.appName}-${rs}`
         console.log('serviceName', serviceName)
@@ -163,11 +168,17 @@ class Core {
         })
         break
       }
-      case 'pure': {
+      case RunMode.detect: {
+        const localFileSystem = new LocalFileSystemDetector(shelljs.pwd().toString())
+        const framework = await detectFramework({ fs: localFileSystem, frameworkList })
+        console.log(framework)
+        const pkg = await readJSON('package.json')
+        const builder = await detectBuilders([], pkg)
+        console.log(builder)
         break
       }
       default:
-        break
+        throw new Error('Invalid runMode')
     }
     return {
       actualDomain
