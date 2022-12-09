@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "mongodb"
-  url      = env("DATABASE_URL")
+  url      = "mongodb://localhost:27017/euclid"
 }
 
 enum repoType {
@@ -54,6 +54,8 @@ model ProjectRuntime {
 model User {
   id              String           @id @default(auto()) @map("_id") @db.ObjectId
   username        String           @unique
+  password        String
+  salt            String
   projects        Project[]
   projectRuntimes ProjectRuntime[]
 }

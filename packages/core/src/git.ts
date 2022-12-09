@@ -4,8 +4,8 @@ import simpleGit, { SimpleGit, SimpleGitOptions } from 'simple-git'
 import { genRandomLowercaseString } from './utils'
 
 export function getGitWorkDIR() {
-  const GIT_WORK_DIR_NAME = process.env.GIT_WORK_DIR_NAME || '.gitWorkDir'
-  return path.resolve(process.cwd(), GIT_WORK_DIR_NAME)
+  const GIT_WORK_DIR = process.env.GIT_WORK_DIR || '.gitWorkDir'
+  return path.resolve(process.cwd(), GIT_WORK_DIR)
 }
 
 /**
@@ -47,7 +47,9 @@ export function genAuthorizedRepoPath(
   const urlData = new URL(repoPath)
   const { protocol, host, pathname } = urlData
   if (!userInfo) return repoPath
-  return `${protocol}//${[userInfo.username, accessToken].join(':')}@${host}${pathname}`
+  return `${protocol}//${[userInfo.username, accessToken]
+    .filter(Boolean)
+    .join(':')}@${host}${pathname}`
 }
 
 export async function cloneRemoteRepoToLocal(
@@ -56,14 +58,10 @@ export async function cloneRemoteRepoToLocal(
   user?: User.InputParam
 ) {
   const dirName: Project.Item['dirName'] = genRandomLowercaseString()
-  try {
-    const ACCESS_TOKEN = process.env.ACCESS_TOKEN
-    await git.clone(genAuthorizedRepoPath(project.repoPath, user, ACCESS_TOKEN), dirName, [
-      `-b${project.branch}`,
-      '--depth=1'
-    ])
-    return dirName
-  } catch (err) {
-    return Promise.reject(err)
-  }
+  const ACCESS_TOKEN = process.env.ACCESS_TOKEN
+  await git.clone(genAuthorizedRepoPath(project.repoPath, user, ACCESS_TOKEN), dirName, [
+    `-b${project.branch}`,
+    '--depth=1'
+  ])
+  return dirName
 }

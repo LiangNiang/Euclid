@@ -1,13 +1,13 @@
 {
   "project": {
-    "repoPath": "/Users/liang/euclid-tmp/Euclid",
+    "repoPath": "/Users/liang/euclid-tmp/evqerv",
     "branch": "main",
-    "subdomainStatic": "cra-template",
-    "subWorkDir": "project-template/cra",
-    "appName": "cra-template",
+    "subdomainStatic": "vite-svelte",
+    "subWorkDir": "",
+    "appName": "vite-svelte",
     "buildPath": "dist",
-    "stage": "prod",
-    "runMode": "dockerfile"
+    "stage": "uat",
+    "runMode": "detect"
   },
   "user": {
     "username": "LiangNiang"

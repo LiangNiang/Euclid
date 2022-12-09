@@ -2,6 +2,7 @@
   "name": "euclid",
   "version": "0.0.1",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "start:cli": "pnpm -F @euclid/cli run start"
   },
   "author": {
@@ -12,11 +13,14 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
+    "@vitest/coverage-c8": "^0.25.6",
+    "@vitest/ui": "^0.25.6",
     "eslint": "^8.28.0",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.31.11",
     "prettier": "^2.7.1",
-    "typescript": "^4.9.3"
+    "typescript": "^4.9.3",
+    "vitest": "^0.25.6"
   }
 }
