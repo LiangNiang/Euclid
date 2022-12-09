@@ -101,9 +101,9 @@ class Core {
     }
   }
 
-  async run(projectID: Project.DB['id']) {
+  async run(projectId: Project.DB['id']) {
     const project = await this.prisma.project.findFirst({
-      where: { id: projectID }
+      where: { id: projectId }
     })
     if (!project) throw new Error('project not found')
     console.log('project info', project)
@@ -130,17 +130,37 @@ class Core {
         console.log('serviceName', serviceName)
         const domainName = await this.genDomainName(project)
         console.log('domainName', domainName)
+        actualDomain = `${domainName}.${process.env.DOMAIN_NAME}`
         if (project.stage === 'prod') {
-          if (rmDockerComposeContainer(domainName).code !== 0) {
+          const pr = await this.prisma.projectRuntime.findUnique({
+            where: {
+              domain: actualDomain
+            }
+          })
+          if (pr && pr.dockerComposeName && rmDockerComposeContainer(pr.dockerComposeName)) {
             throw new Error('生产环境下删除旧的容器失败')
           }
         }
         const config = this.genDockerComposeConfig(serviceName, domainName)
         fs.writeFileSync('./docker-compose.yaml', stringify(config))
-        if (shelljs.exec(`docker-compose --project-name ${domainName} up --build -d`).code !== 0) {
+        shelljs.exec(`docker-compose --project-name cra-template up --build -d`)
+        if (shelljs.error()) {
           throw new Error('Failed to start app on dockerfile mode')
         }
-        actualDomain = `${domainName}.${process.env.DOMAIN_NAME}`
+        // 生成 runtime 记录
+        await this.prisma.projectRuntime.create({
+          data: {
+            runMode: 'dockerfile',
+            domain: actualDomain,
+            dockerComposeName: domainName,
+            project: {
+              connect: { id: project.id }
+            },
+            user: {
+              connect: { id: project.userId }
+            }
+          }
+        })
         break
       }
       case 'pure': {

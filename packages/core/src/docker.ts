@@ -6,5 +6,6 @@ export function initDockerInstance() {
 }
 
 export function rmDockerComposeContainer(name: string) {
-  return shelljs.exec(`docker-compose --project-name ${name} down`)
+  shelljs.exec(`docker-compose --project-name ${name} down --rmi all`)
+  return shelljs.error()
 }
