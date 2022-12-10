@@ -41,7 +41,7 @@ export function initGitInstance() {
  */
 export function genAuthorizedRepoPath(
   repoPath: string,
-  userInfo?: User.Item,
+  userInfo?: NUser.InputParam,
   accessToken?: string
 ) {
   const urlData = new URL(repoPath)
@@ -54,10 +54,10 @@ export function genAuthorizedRepoPath(
 
 export async function cloneRemoteRepoToLocal(
   git: SimpleGit,
-  project: Project.InputParam,
-  user?: User.InputParam
+  project: NProject.InputParam,
+  user?: NUser.InputParam
 ) {
-  const dirName: Project.Item['dirName'] = genRandomLowercaseString()
+  const dirName: NProject.Item['dirName'] = genRandomLowercaseString()
   const ACCESS_TOKEN = process.env.ACCESS_TOKEN
   await git.clone(genAuthorizedRepoPath(project.repoPath, user, ACCESS_TOKEN), dirName, [
     `-b${project.branch}`,

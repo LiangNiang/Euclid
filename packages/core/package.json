@@ -19,7 +19,6 @@
   "license": "MIT",
   "dependencies": {
     "@euclid/common": "workspace:*",
-    "@prisma/client": "^4.7.1",
     "@vercel/frameworks": "^1.1.14",
     "@vercel/fs-detectors": "^3.5.4",
     "dockerode": "^3.3.4",
@@ -39,7 +38,6 @@
     "@types/is-url": "^1.2.30",
     "@types/node": "^18.7.20",
     "@types/shelljs": "^0.8.11",
-    "prisma": "^4.7.1",
     "tsx": "^3.12.1",
     "typescript": "^4.8.3"
   }

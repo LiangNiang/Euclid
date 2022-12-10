@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient } from '@euclid/common'
 
 export function initDBInstance() {
   const prisma = new PrismaClient()
