@@ -9,7 +9,7 @@ const ajv = new Ajv()
 
 function validateConfigFile(
   data: unknown
-): data is { project: Project.InputParam; user?: User.InputParam } {
+): data is { project: NProject.InputParam; user?: NUser.InputParam } {
   const schema = {
     type: 'object',
     properties: {
@@ -72,7 +72,7 @@ const INIT_CWD = process.env.INIT_CWD
 const configPath = resolve(INIT_CWD, file)
 
 readFile(configPath, 'utf8', async (err, data) => {
-  if (err) throw new Error(err)
+  if (err) throw err
   const config = JSON.parse(data)
   const valid = validateConfigFile(config)
   if (!valid) throw new Error('Invalid config file')

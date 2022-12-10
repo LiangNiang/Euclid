@@ -1,0 +1,32 @@
+[global]
+  checkNewVersion = true
+  sendAnonymousUsage = true
+
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+  [entryPoints.websecure]
+    address = ":443"
+
+[api]
+  insecure = true
+  dashboard = true
+
+[providers]
+  [providers.docker]
+    exposedByDefault = false
+  [providers.file]
+    filename = "/etc/traefik/dynamic_conf.toml"
+    watch = true
+
+[log]
+  filePath = "/log/traefik.log"
+  format = "json"
+
+[accessLog]
+  filePath = "/log/access.log"
+  format = "json"
+  [accessLog.fields]
+    defaultMode = "keep"
+    [accessLog.fields.headers]
+      defaultMode = "keep"

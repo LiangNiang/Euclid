@@ -1,0 +1,4 @@
+[http.routers.api-not-secure]
+  rule = "Host(`traefik.devdoll.art`)"
+  entrypoints = "web"
+  service = "api@internal"

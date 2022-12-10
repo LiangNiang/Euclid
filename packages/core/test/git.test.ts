@@ -6,6 +6,7 @@ import {
   genAuthorizedRepoPath,
   cloneRemoteRepoToLocal
 } from '../src/git'
+import { CONFIG } from '@euclid/common'
 
 vi.mock('../src/utils', () => {
   return {
@@ -15,18 +16,17 @@ vi.mock('../src/utils', () => {
 
 describe('git module test', () => {
   test('getGitWorkDIR 空参数', () => {
+    // @ts-ignore
+    CONFIG.GIT_WORK_DIR = ''
     const dir = getGitWorkDIR()
     expect(dir).toEqual(`${process.cwd()}/.gitWorkDir`)
   })
 
   test('getGitWorkDIR 有 GIT_WORK_DIR 配置', () => {
-    const t = process.cwd()
-    vi.stubGlobal('process', {
-      env: { GIT_WORK_DIR: '/home/liangniang/euclid-tmp' },
-      cwd: () => t
-    })
+    // @ts-ignore
+    CONFIG.GIT_WORK_DIR = '/aaa'
     const dir = getGitWorkDIR()
-    expect(dir).toEqual('/home/liangniang/euclid-tmp')
+    expect(dir).toEqual('/aaa')
   })
 
   test('initGitInstance', () => {
@@ -48,7 +48,7 @@ describe('git module test', () => {
     expect(fs.mkdirSync).toHaveBeenCalledTimes(1)
     expect(res).toMatchInlineSnapshot(`
       {
-        "baseDir": "/home/liangniang/euclid-tmp",
+        "baseDir": "/aaa",
         "binary": "git",
         "maxConcurrentProcesses": 6,
         "trimmed": false,

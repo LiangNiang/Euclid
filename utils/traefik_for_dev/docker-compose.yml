@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  traefik:
+    image: traefik
+    container_name: traefik
+    environment:
+      - TZ=Asia/Shanghai
+    restart: always
+    ports:
+      - 80:80
+      - 8080:8080
+      - 443:443
+    volumes:
+      - ./dynamic_conf.toml:/etc/traefik/dynamic_conf.toml
+      - ./traefik.toml:/etc/traefik/traefik.toml
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./log:/log/home/liangniang/projects/Euclid/packages/common

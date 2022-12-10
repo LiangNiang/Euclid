@@ -2,9 +2,10 @@ import path from 'node:path'
 import fs from 'node:fs'
 import simpleGit, { SimpleGit, SimpleGitOptions } from 'simple-git'
 import { genRandomLowercaseString } from './utils'
+import { CONFIG } from '@euclid/common'
 
 export function getGitWorkDIR() {
-  const GIT_WORK_DIR = process.env.GIT_WORK_DIR || '.gitWorkDir'
+  const GIT_WORK_DIR = CONFIG.GIT_WORK_DIR || '.gitWorkDir'
   return path.resolve(process.cwd(), GIT_WORK_DIR)
 }
 
@@ -58,7 +59,7 @@ export async function cloneRemoteRepoToLocal(
   user?: NUser.InputParam
 ) {
   const dirName: NProject.Item['dirName'] = genRandomLowercaseString()
-  const ACCESS_TOKEN = process.env.ACCESS_TOKEN
+  const ACCESS_TOKEN = CONFIG.ACCESS_TOKEN
   await git.clone(genAuthorizedRepoPath(project.repoPath, user, ACCESS_TOKEN), dirName, [
     `-b${project.branch}`,
     '--depth=1'

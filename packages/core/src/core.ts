@@ -14,6 +14,7 @@ import { PrismaClient, RunMode } from '@euclid/common'
 import { readJSON } from 'fs-extra'
 import frameworkList from '@vercel/frameworks'
 import { LocalFileSystemDetector, detectFramework, detectBuilders } from '@vercel/fs-detectors'
+import { CONFIG } from '@euclid/common'
 
 class Core {
   git: SimpleGit
@@ -76,12 +77,12 @@ class Core {
         dockerfile: 'Dockerfile'
       },
       environment: {
-        DOMAIN_NAME: process.env.DOMAIN_NAME
+        DOMAIN_NAME: CONFIG.DOMAIN_NAME
       },
       restart: 'always',
       labels: [
         'traefik.enable=true',
-        `traefik.http.routers.${serviceName}.rule=Host(\`${domainName}.\${DOMAIN_NAME}\`)`,
+        `traefik.http.routers.${serviceName}.rule=Host(\`${domainName}.${CONFIG.DOMAIN_NAME}\`)`,
         `traefik.http.routers.${serviceName}.service=${serviceName}`,
         `traefik.http.services.${serviceName}.loadbalancer.server.port=80`
       ]
@@ -134,7 +135,7 @@ class Core {
         console.log('serviceName', serviceName)
         const domainName = await this.genDomainName(project)
         console.log('domainName', domainName)
-        actualDomain = `${domainName}.${process.env.DOMAIN_NAME}`
+        actualDomain = `${domainName}.${CONFIG.DOMAIN_NAME}`
         if (project.stage === 'prod') {
           const pr = await this.prisma.projectRuntime.findUnique({
             where: {
@@ -147,7 +148,7 @@ class Core {
         }
         const config = this.genDockerComposeConfig(serviceName, domainName)
         fs.writeFileSync('./docker-compose.yaml', stringify(config))
-        shelljs.exec(`docker-compose --project-name cra-template up --build -d`)
+        shelljs.exec(`docker-compose --project-name ${domainName} up --build -d`)
         if (shelljs.error()) {
           throw new Error('Failed to start app on dockerfile mode')
         }

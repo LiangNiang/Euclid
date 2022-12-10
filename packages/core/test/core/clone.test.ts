@@ -25,8 +25,10 @@ vi.mock('../../src/git', async () => {
 describe('core module clone test', () => {
   const core = new Core()
 
+  let u: NUser.Item
+
   beforeAll(async () => {
-    await core.prisma.user.create({
+    u = await core.prisma.user.create({
       data: {
         username: 'LiangNiang',
         password: 'abcdefg',
@@ -39,7 +41,7 @@ describe('core module clone test', () => {
     await core.prisma.project.deleteMany()
     await core.prisma.user.deleteMany({
       where: {
-        username: 'LiangNiang'
+        id: u?.id
       }
     })
   })
