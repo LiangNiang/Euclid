@@ -1,9 +1,10 @@
 {
   "name": "@euclid/common",
   "version": "0.0.1",
-  "private": true,
   "main": "index.ts",
   "scripts": {
+    "prisma:gen": "prisma generate",
+    "prisma:studio": "prisma studio",
     "lint": "eslint --fix ."
   },
   "author": {
@@ -12,6 +13,10 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.1"
+    "@tsconfig/recommended": "^1.0.1",
+    "prisma": "^4.7.1"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.7.1"
   }
 }

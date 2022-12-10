@@ -1,7 +1,5 @@
-declare namespace User {
-  interface Item {
-    username: string
-  }
+declare namespace NUser {
+  type Item = import('@prisma/client').User
 
-  type InputParam = Item
+  type InputParam = Pick<Item, 'username'>
 }

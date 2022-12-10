@@ -10,7 +10,7 @@ import { stringify } from 'yaml'
 import isURL from 'is-url'
 import { safeCD } from './shellWrapper'
 import { initDockerInstance, rmDockerComposeContainer } from './docker'
-import { PrismaClient, Project, RunMode } from '@prisma/client'
+import { PrismaClient, RunMode } from '@euclid/common'
 import { readJSON } from 'fs-extra'
 import frameworkList from '@vercel/frameworks'
 import { LocalFileSystemDetector, detectFramework, detectBuilders } from '@vercel/fs-detectors'
@@ -26,7 +26,7 @@ class Core {
     this.docker = initDockerInstance()
   }
 
-  async clone(config: { project: Project.InputParam; user: User.InputParam }) {
+  async clone(config: { project: NProject.InputParam; user: NUser.InputParam }) {
     const { project, user } = config
     const { repoPath } = project
     if (isURL(repoPath)) {
@@ -48,9 +48,8 @@ class Core {
         console.log('Project clone success')
         return res.id
       } catch (err) {
-        console.log(err)
         console.error('Project clone error')
-        return
+        throw err
       }
     } else {
       const res = await this.prisma.project.create({
@@ -90,7 +89,7 @@ class Core {
     return newConfig
   }
 
-  async genDomainName(project: Project) {
+  async genDomainName(project: NProject.Item) {
     switch (project.stage) {
       case 'uat': {
         const branchInfo = await this.git.branch()
@@ -106,7 +105,7 @@ class Core {
     }
   }
 
-  async run(projectId: Project.DB['id']) {
+  async run(projectId: NProject.Item['id']) {
     const project = await this.prisma.project.findFirst({
       where: { id: projectId }
     })
